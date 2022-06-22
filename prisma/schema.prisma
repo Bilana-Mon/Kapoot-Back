@@ -9,3 +9,44 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id    Int     @default(autoincrement()) @id
+  email String  @unique
+  password String @unique
+  nickname  String?
+  isAdmin   Boolean?
+  games Game[]
+}
+
+model Game {
+  id        Int      @default(autoincrement()) @id
+  themes    Theme[]
+  started   DateTime
+  finished  DateTime
+  Admin    User?    @relation(fields: [adminId], references: [id])
+  adminId  Int?
+}
+
+model Theme {
+  id        Int      @default(autoincrement()) @id
+  title  String
+  questions Question[] 
+  isCurrGame   Game? @relation(fields: [gameId], references: [id])
+  gameId Int?
+}
+
+model Question {
+  id        Int      @default(autoincrement()) @id
+  theme    Theme?  @relation(fields: [themeId], references: [id])
+  title  String 
+  answers Answer[] 
+  themeId  Int?
+}
+
+model Answer {
+  id        Int      @default(autoincrement()) @id
+  title     String
+  questionTitle   Question?  @relation(fields: [quetionId], references: [id])
+  quetionId   Int?
+}
