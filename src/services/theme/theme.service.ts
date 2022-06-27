@@ -6,7 +6,7 @@ import { Theme, Prisma } from '@prisma/client';
 export class ThemeService {
     constructor(private prisma: PrismaService) { }
 
-    async Theme(
+    async theme(
         themeWhereUniqueInput: Prisma.ThemeWhereUniqueInput,
     ): Promise<Theme | null> {
         return this.prisma.theme.findUnique({
@@ -14,7 +14,7 @@ export class ThemeService {
         });
     }
 
-    async Themes(params: {
+    async themes(params: {
         skip?: number;
         take?: number;
         cursor?: Prisma.ThemeWhereUniqueInput;

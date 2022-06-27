@@ -24,6 +24,7 @@ model Game {
   themes    Theme[]
   started   DateTime
   finished  DateTime
+  players   Int
   Admin    User?    @relation(fields: [adminId], references: [id])
   adminId  Int?
 }
@@ -50,3 +51,4 @@ model Answer {
   questionTitle   Question?  @relation(fields: [quetionId], references: [id])
   quetionId   Int?
 }
+

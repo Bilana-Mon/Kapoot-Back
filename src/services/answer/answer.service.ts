@@ -6,7 +6,7 @@ import { Answer, Prisma } from '@prisma/client';
 export class AnswerService {
     constructor(private prisma: PrismaService) { }
 
-    async Answer(
+    async answer(
         answerWhereUniqueInput: Prisma.AnswerWhereUniqueInput,
     ): Promise<Answer | null> {
         return this.prisma.answer.findUnique({
@@ -14,7 +14,7 @@ export class AnswerService {
         });
     }
 
-    async Answers(params: {
+    async answers(params: {
         skip?: number;
         take?: number;
         cursor?: Prisma.AnswerWhereUniqueInput;
