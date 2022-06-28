@@ -50,7 +50,7 @@ export class AppController {
 
   @Post('game')
   async createGame(
-    @Body() gameData: {  adminId: number, started: Date, finished: Date, players: number },
+    @Body() gameData: {  adminId: number, started: Date, finished: Date, players:number },
   ): Promise<GameModel> {
     const { adminId, started, finished, players } = gameData;
     return this.GameService.createGame({
@@ -59,7 +59,7 @@ export class AppController {
       },
       started,
       finished,
-      // players ????
+      // players ??????
     });
   }
 
@@ -70,7 +70,7 @@ export class AppController {
     return this.userService.createUser(userData);
   }
 
-  @Put('start/:id')
+  @Put('start-game/:id')
   async startPost(@Param('id') id: string): Promise<GameModel> {
     return this.GameService.updateGame({
       where: { id: Number(id) },

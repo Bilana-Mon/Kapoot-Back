@@ -25,6 +25,7 @@ model Game {
   started   DateTime
   finished  DateTime
   players   Int
+  // winner    User?  @relation(fields: [players], references: [nickname])
   Admin    User?    @relation(fields: [adminId], references: [id])
   adminId  Int?
 }
