@@ -15,7 +15,7 @@ model User {
   email String  @unique
   password String @unique
   nickname  String?
-  isAdmin   Boolean?
+  isAdmin   Boolean @default(false)
   games Game[]
 }
 
