@@ -42,9 +42,17 @@ export class UserService {
                 email
             }
         });
+        const userWithThisNickname = await this.prismaService.user.findFirst({
+            where: {
+                nickname
+            }
+        });
 
         if (userWithThisEmail) {
             throw new UnauthorizedException('User with this email existing!')
+        }
+        if (userWithThisNickname) {
+            throw new UnauthorizedException('User with this nickname existing!')
         }
 
         const saltedPassword = await bcrypt.hash(password, Number(this.configService.get('SALT')))
@@ -56,6 +64,17 @@ export class UserService {
             }
         });
     }
+
+    // async findOne(data: Prisma.UserWhereUniqueInput): Promise<User> {
+    //     const userId = data;
+    //     return await this.prismaService.user.findUnique({
+    //         where: {
+    //             userId : userId
+    //         }
+            
+    //     })
+        
+    // }
 
     async updateUser(params: {
         where: Prisma.UserWhereUniqueInput;
