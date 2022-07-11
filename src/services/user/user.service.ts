@@ -9,11 +9,9 @@ import { UnauthorizedException } from '@nestjs/common';
 export class UserService {
     constructor(private prismaService: PrismaService, private configService: ConfigService) { }
 
-    async user(
-        userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-    ): Promise<User | null> {
+    async getUserById(id:number,): Promise<User | null> {
         return this.prismaService.user.findUnique({
-            where: userWhereUniqueInput,
+            where: {id},
         });
     }
 
