@@ -20,7 +20,7 @@ export class AuthController {
             private readonly userService: UserService
         ) { }
 
-    @Post()
+    @Post('/signup')
     async signupUser(
         @Body() userData: { nickname?: string; email: string, password: string },
     ): Promise<UserModel> {
