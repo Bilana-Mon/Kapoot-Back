@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
     imports: [PrismaModule, ConfigModule],
     providers: [UserService],
-    controllers: [UserController]
+    controllers: [UserController],
+    exports: [UserService]
 })
 export class UserModule {}
