@@ -11,14 +11,16 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../services/user/user.service';
 import { User as UserModel } from '@prisma/client';
-import { AuthGuard } from '@nestjs/passport';
+import { LocalAuthGuard } from './local-auth.guard';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
     constructor
         (
-            private readonly userService: UserService
-        ) { }
+            private readonly userService: UserService,
+            private readonly authService: AuthService,
+    ) { }
 
     @Post('/signup')
     async signupUser(
@@ -27,10 +29,9 @@ export class AuthController {
         return this.userService.createUser(userData);
     }
 
-    @UseGuards(AuthGuard('local'))
+    @UseGuards(LocalAuthGuard)
     @Post('/login')
-
-    async login(@Request() req) {
-        return req.user;
+    async login(@Request() req) {        
+        return this.authService.loginUser(req.user);
     }
 }
