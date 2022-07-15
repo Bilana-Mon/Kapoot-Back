@@ -30,6 +30,9 @@ export class AuthController {
 
     @Post('/login')
     async login(@Body() loginPayload: { nickname: string; password: string }) {      
-        return this.authService.loginUser(loginPayload);
+        const token = await this.authService.loginUser(loginPayload);
+        return {
+            token
+        }
     }
 }
