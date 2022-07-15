@@ -1,15 +1,12 @@
 import {
     Controller,
     Get,
-    Param,
-    Post,
-    Body,
-    Put,
-    Delete,
     Request,
+    UseGuards
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User as UserModel } from '@prisma/client';
+import { LocalAuthGuard } from '../../auth/local-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -18,10 +15,10 @@ export class UserController {
             private readonly userService: UserService
         ) { }
 
-    
-    @Get('/:id')
-    async getUserById(@Param('id') id: number): Promise<UserModel> {
-        return this.userService.getUserById(id);
+    @UseGuards(LocalAuthGuard)
+    @Get()
+    async getUserById(@Request() req): Promise<UserModel> {
+        return this.userService.getUserById(req.user.id);
     }
 
 }

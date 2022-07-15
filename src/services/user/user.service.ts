@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { UnauthorizedException } from '@nestjs/common';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -14,24 +15,26 @@ export class UserService {
             where: { id },
         });
     }
-    
 
-    async users(params: {
-        skip?: number;
-        take?: number;
-        cursor?: Prisma.UserWhereUniqueInput;
-        where?: Prisma.UserWhereInput;
-        orderBy?: Prisma.UserOrderByWithRelationInput;
-    }): Promise<User[]> {
-        const { skip, take, cursor, where, orderBy } = params;
-        return this.prismaService.user.findMany({
-            skip,
-            take,
-            cursor,
-            where,
-            orderBy,
+    async validateUser(nickname: string, password: string): Promise<User> {
+        const foundUser = await this.prismaService.user.findFirst({
+            where: { nickname }
         });
+
+        if (!foundUser) {
+            throw new UnauthorizedException('Please check nickname and password')
+        }
+
+        const isPasswordMatching = await bcrypt.compare(password, foundUser.password);
+
+        if (!isPasswordMatching) {
+            throw new UnauthorizedException('Please check nickname and password')
+        }
+
+        return foundUser;
+
     }
+
 
     async createUser(data: Prisma.UserCreateInput): Promise<User> {
         const { nickname, email, password } = data;
