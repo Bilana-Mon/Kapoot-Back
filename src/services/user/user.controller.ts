@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User as UserModel } from '@prisma/client';
-import { LocalAuthGuard } from '../../auth/local-auth.guard';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -15,10 +15,10 @@ export class UserController {
             private readonly userService: UserService
         ) { }
 
-    @UseGuards(LocalAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get()
     async getUserById(@Request() req): Promise<UserModel> {
-        return this.userService.getUserById(req.user.id);
+        return this.userService.getUserById(req.user.userId);
     }
 
 }

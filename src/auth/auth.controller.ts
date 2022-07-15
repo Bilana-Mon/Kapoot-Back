@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../services/user/user.service';
 import { User as UserModel } from '@prisma/client';
-import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
