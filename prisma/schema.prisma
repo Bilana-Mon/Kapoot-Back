@@ -11,45 +11,57 @@ datasource db {
 }
 
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  password String @unique
-  nickname  String?
-  isAdmin   Boolean @default(false)
-  games Game[]
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String  @unique
+  nickname String?
+  isAdmin  Boolean @default(false)
+  games    Game[]
 }
 
 model Game {
-  id        Int      @default(autoincrement()) @id
-  themes    Theme[]
-  started   DateTime
-  finished  DateTime
-  players   Int
+  id              Int            @id @default(autoincrement())
+  themes          Theme[]
+  questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
+  questionnaireId Int?
+  started         DateTime
+  finished        DateTime
+  players         Int
   // winner    User?  @relation(fields: [players], references: [nickname])
-  Admin    User?    @relation(fields: [adminId], references: [id])
-  adminId  Int?
+  Admin           User?          @relation(fields: [adminId], references: [id])
+  adminId         Int?
 }
 
 model Theme {
-  id        Int      @default(autoincrement()) @id
-  title  String
-  questions Question[] 
-  isCurrGame   Game? @relation(fields: [gameId], references: [id])
-  gameId Int?
+  id            Int             @id @default(autoincrement())
+  title         String
+  isCurrGame    Game?           @relation(fields: [gameId], references: [id])
+  gameId        Int?
+  Questionnaire Questionnaire[]
+}
+
+model Questionnaire {
+  id        Int        @id @default(autoincrement())
+  theme     Theme?     @relation(fields: [themeId], references: [id])
+  questions Question[]
+  answers   Answer[]
+  themeId   Int?
+  Game      Game[]
 }
 
 model Question {
-  id        Int      @default(autoincrement()) @id
-  theme    Theme?  @relation(fields: [themeId], references: [id])
-  title  String 
-  answers Answer[] 
-  themeId  Int?
+  id              Int            @id @default(autoincrement())
+  questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
+  title           String
+  answers         Answer[]
+  questionnaireId Int?
 }
 
 model Answer {
-  id        Int      @default(autoincrement()) @id
-  title     String
-  questionTitle   Question?  @relation(fields: [quetionId], references: [id])
-  quetionId   Int?
+  id              Int            @id @default(autoincrement())
+  title           String
+  questionTitle   Question?      @relation(fields: [quetionId], references: [id])
+  quetionId       Int?
+  Questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
+  questionnaireId Int?
 }
-
