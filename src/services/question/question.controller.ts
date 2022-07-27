@@ -12,8 +12,7 @@ export class QuestionController {
     @Get()
     async getQuestionById(@Request() req): Promise<QuestionModel> {
         console.log('lala get');
-        
-        return this.questionService.getQuestionById(req.question.questionId);
+        return this.questionService.getQuestionById(req.question.id);
     }
 
     @Post()

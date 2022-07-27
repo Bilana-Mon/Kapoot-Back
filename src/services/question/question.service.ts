@@ -8,6 +8,8 @@ export class QuestionService {
     constructor(private prismaService: PrismaService) { }
 
     async getQuestionById(id: number): Promise<Question | null> {
+        console.log('lala service');
+        
         return this.prismaService.question.findUnique({
             where: { id },
         });
