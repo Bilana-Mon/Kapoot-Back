@@ -9,6 +9,11 @@ export class QuestionController {
             private questionService: QuestionService
         ) { }
 
+        @Get()
+        async getQuestions(@Request() req): Promise<any>{
+            return this.questionService.getQuestions();
+        }
+
     @Get(':id')
     async getQuestionById(@Param('id') questionId): Promise<QuestionModel> {
         console.log('lala get');

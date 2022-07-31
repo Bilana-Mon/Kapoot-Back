@@ -37,9 +37,6 @@ export class GameController {
       where: {
         OR: [
           {
-            themes: {},
-          },
-          {
             finished: {},
           },
         ],

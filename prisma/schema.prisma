@@ -21,7 +21,6 @@ model User {
 
 model Game {
   id              Int            @id @default(autoincrement())
-  themes          Theme[]
   questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
   questionnaireId Int?
   started         DateTime
@@ -32,20 +31,9 @@ model Game {
   adminId         Int?
 }
 
-model Theme {
-  id            Int             @id @default(autoincrement())
-  title         String
-  isCurrGame    Game?           @relation(fields: [gameId], references: [id])
-  gameId        Int?
-  Questionnaire Questionnaire[]
-}
-
 model Questionnaire {
   id        Int        @id @default(autoincrement())
-  theme     Theme?     @relation(fields: [themeId], references: [id])
   questions Question[]
-  answers   Answer[]
-  themeId   Int?
   Game      Game[]
 }
 
@@ -53,15 +41,6 @@ model Question {
   id              Int            @id @default(autoincrement())
   questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
   title           String
-  answers         Answer[]
-  questionnaireId Int?
-}
-
-model Answer {
-  id              Int            @id @default(autoincrement())
-  title           String?
-  questionTitle   Question?      @relation(fields: [quetionId], references: [id])
-  quetionId       Int?
-  Questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
+  answers         String[]
   questionnaireId Int?
 }

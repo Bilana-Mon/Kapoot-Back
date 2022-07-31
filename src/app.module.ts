@@ -8,13 +8,12 @@ import { QuestionnaireController } from './services/questionnaire/questionnaire.
 import { QuestionnaireModule } from './services/questionnaire/questionnaire.module';
 import { QuestionModule } from './services/question/question.module';
 import { QuestionController } from './services/question/question.controller';
-import { AnswerModule } from './services/answer/answer.module';
-import { AnswerController } from './services/answer/answer.controller';
+
 
 
 @Module({
-  imports: [ConfigModule.forRoot(), UserModule, AuthModule, QuestionnaireModule, QuestionModule, AnswerModule],
-  controllers: [AppController, QuestionnaireController, QuestionController, AnswerController],
+  imports: [ConfigModule.forRoot(), UserModule, AuthModule, QuestionnaireModule, QuestionModule],
+  controllers: [AppController, QuestionnaireController, QuestionController],
   providers: [AppService,],
 })
 export class AppModule { }
