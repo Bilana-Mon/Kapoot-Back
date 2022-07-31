@@ -4,53 +4,28 @@ import { Answer, Prisma } from '@prisma/client';
 
 @Injectable()
 export class AnswerService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prismaService: PrismaService) { }
 
-    async answer(
-        answerWhereUniqueInput: Prisma.AnswerWhereUniqueInput,
-    ): Promise<Answer | null> {
-        return this.prisma.answer.findUnique({
-            where: answerWhereUniqueInput,
+    async getAnswerById(id: number): Promise<Answer | null> {
+        return this.prismaService.answer.findUnique({
+            where: { id },
         });
     }
 
-    async answers(params: {
-        skip?: number;
-        take?: number;
-        cursor?: Prisma.AnswerWhereUniqueInput;
-        where?: Prisma.AnswerWhereInput;
-        orderBy?: Prisma.AnswerOrderByWithRelationInput;
-    }): Promise<Answer[]> {
-        const { skip, take, cursor, where, orderBy } = params;
-        return this.prisma.answer.findMany({
-            skip,
-            take,
-            cursor,
-            where,
-            orderBy,
-        });
-    }
 
-    async createAnswer(data: Prisma.AnswerCreateInput): Promise<Answer> {
-        return this.prisma.answer.create({
-            data,
-        });
-    }
 
-    async updateAnswer(params: {
-        where: Prisma.AnswerWhereUniqueInput;
-        data: Prisma.AnswerUpdateInput;
-    }): Promise<Answer> {
-        const { where, data } = params;
-        return this.prisma.answer.update({
-            data,
-            where,
-        });
-    }
+    // async createAnswers(): Promise<Prisma.BatchPayload> {
+    //     const answers = await this.prismaService.answer.createMany({
+    //         data:
+    //         [
+    //             [{ title: "In the fridge" }, { title: "On the table" }, { title: "Outside the door" }, { title: "There is no milk" }],
+    //             [{ title: "In the backyard" }, { title: "In the park" }, { title: "It run away" }, { title: "We don't have a dog" }],
+    //             [{ title: "In the backyard" }, { title: "In the park" }, { title: "It run away" }, { title: "We don't have a cat" }],
+    //             [{ title: "In the backyard" }, { title: "In the park" }, { title: "It run away" }, { title: "We don't have a horse" }],
+    //             [{ title: "In the backyard" }, { title: "In the park" }, { title: "It run away" }, { title: "We don't have a donkey" }],
+    //         ]
 
-    async deleteAnswer(where: Prisma.AnswerWhereUniqueInput): Promise<Answer> {
-        return this.prisma.answer.delete({
-            where,
-        });
-    }
+    //     });
+    //     return answers;
+    // }
 }

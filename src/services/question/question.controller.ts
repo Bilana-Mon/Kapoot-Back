@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Request } from '@nestjs/common';
+import { Controller, Get, Post, Request,Param } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { Prisma, Question as QuestionModel } from '@prisma/client';
 
@@ -9,16 +9,16 @@ export class QuestionController {
             private questionService: QuestionService
         ) { }
 
-    @Get()
-    async getQuestionById(@Request() req): Promise<QuestionModel> {
+    @Get(':id')
+    async getQuestionById(@Param('id') questionId): Promise<QuestionModel> {
         console.log('lala get');
-        return this.questionService.getQuestionById(req.question.id);
+        return this.questionService.getQuestionById(parseInt(questionId));
     }
 
     @Post()
     async createQuestions(): Promise<Prisma.BatchPayload> {
         console.log('lala post');
-        
+
         return this.questionService.createQuestions();
     }
 }
