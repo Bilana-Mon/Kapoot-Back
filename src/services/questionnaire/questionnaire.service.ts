@@ -13,10 +13,11 @@ export class QuestionnaireService {
         })
     }
 
-    async createQuestionnaire():Promise<Questionnaire>{
+    async createQuestionnaire(userId: number):Promise<Questionnaire>{
         return this.prismaService.questionnaire.create({
-            data:{}
+            data:{
+                userId
+            }
         })
     }
-
 }

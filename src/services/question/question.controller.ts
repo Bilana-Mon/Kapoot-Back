@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Request,Param } from '@nestjs/common';
+import { Controller, Get, Post, Request, Param, Body, UseGuards } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { Prisma, Question as QuestionModel } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('question')
 export class QuestionController {
     constructor
@@ -9,10 +11,10 @@ export class QuestionController {
             private questionService: QuestionService
         ) { }
 
-        @Get()
-        async getQuestions(@Request() req): Promise<any>{
-            return this.questionService.getQuestions();
-        }
+    @Get()
+    async getQuestions(@Request() req): Promise<any> {
+        return this.questionService.getQuestions();
+    }
 
     @Get(':id')
     async getQuestionById(@Param('id') questionId): Promise<QuestionModel> {
@@ -21,9 +23,7 @@ export class QuestionController {
     }
 
     @Post()
-    async createQuestions(): Promise<Prisma.BatchPayload> {
-        console.log('lala post');
-
-        return this.questionService.createQuestions();
+    async insertQuestionToQuestionnaire(@Body() payload: Prisma.QuestionCreateInput): Promise<QuestionModel> {
+        return this.questionService.createQuestion(payload);
     }
 }

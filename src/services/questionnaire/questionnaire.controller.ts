@@ -4,11 +4,14 @@ import {
     Post,
     Body,
     Request,
+    Param,
+    UseGuards
 } from '@nestjs/common';
 import { QuestionnaireService } from './questionnaire.service';
 import { Questionnaire as QuestionnaireModel } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-
+@UseGuards(JwtAuthGuard)
 @Controller('questionnaire')
 export class QuestionnaireController {
     constructor
@@ -22,8 +25,9 @@ export class QuestionnaireController {
     }
 
     @Post()
-    async createQuestionnaire(): Promise<QuestionnaireModel>{
-        return this.questionnaireService.createQuestionnaire();
+    async createQuestionnaire(@Request() req): Promise<QuestionnaireModel>{
+        const userId = req.user.userId;
+        return this.questionnaireService.createQuestionnaire(userId);
     }
 
 }
