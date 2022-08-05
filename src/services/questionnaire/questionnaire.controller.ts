@@ -5,7 +5,8 @@ import {
     Body,
     Request,
     Param,
-    UseGuards
+    UseGuards,
+    ParseIntPipe
 } from '@nestjs/common';
 import { QuestionnaireService } from './questionnaire.service';
 import { Questionnaire as QuestionnaireModel } from '@prisma/client';
@@ -19,13 +20,14 @@ export class QuestionnaireController {
             private readonly questionnaireService: QuestionnaireService
         ) { }
 
-    @Get()
-    async getQuestionnaireById(@Request() req): Promise<QuestionnaireModel> {
-        return this.questionnaireService.getQuestionnaireById(req.Questionnaire.QuestionnaireId);
+    @Get(':questionnaireId')
+    async getQuestionnaireById(@Param("questionnaireId",new ParseIntPipe()) questionnaireId, @Request() req): Promise<QuestionnaireModel> {
+        const userId = req.user.userId
+        return this.questionnaireService.getAggregatedQuestionnaire(userId, questionnaireId);
     }
 
     @Post()
-    async createQuestionnaire(@Request() req): Promise<QuestionnaireModel>{
+    async createQuestionnaire(@Request() req): Promise<QuestionnaireModel> {
         const userId = req.user.userId;
         return this.questionnaireService.createQuestionnaire(userId);
     }
