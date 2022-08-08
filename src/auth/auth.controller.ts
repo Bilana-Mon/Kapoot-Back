@@ -23,9 +23,11 @@ export class AuthController {
 
     @Post('/signup')
     async signupUser(
-        @Body() userData: { nickname?: string; email: string, password: string },
+        @Body() userData: { nickname: string; email: string, password: string },
     ): Promise<UserModel> {
-        return this.userService.createUser(userData);
+        // const token = await this.authService.loginUser(userData);
+        const user = this.userService.createUser(userData);
+        return user;
     }
 
     @Post('/login')
