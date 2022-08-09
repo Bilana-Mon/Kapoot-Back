@@ -8,7 +8,7 @@ export class QuestionnaireService {
     constructor(private prismaService: PrismaService, private configService: ConfigService) { }
 
     async getAggregatedQuestionnaire(userId: number, id:number): Promise<Questionnaire | null> {
-        return this.prismaService.questionnaire.findFirst({
+        return await this.prismaService.questionnaire.findFirst({
             where: { userId, id},
             include: {
                 questions: true
