@@ -8,11 +8,12 @@ import { QuestionnaireController } from './services/questionnaire/questionnaire.
 import { QuestionnaireModule } from './services/questionnaire/questionnaire.module';
 import { QuestionModule } from './services/question/question.module';
 import { QuestionController } from './services/question/question.controller';
+import { GameModule } from './services/game/game.module';
 
 
 
 @Module({
-  imports: [ConfigModule.forRoot(), UserModule, AuthModule, QuestionnaireModule, QuestionModule],
+  imports: [ConfigModule.forRoot(), UserModule, AuthModule, QuestionnaireModule, QuestionModule, GameModule],
   controllers: [AppController, QuestionnaireController, QuestionController],
   providers: [AppService,],
 })
