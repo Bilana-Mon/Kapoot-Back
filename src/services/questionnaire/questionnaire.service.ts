@@ -7,9 +7,9 @@ import { ConfigService } from '@nestjs/config';
 export class QuestionnaireService {
     constructor(private prismaService: PrismaService, private configService: ConfigService) { }
 
-    async getAggregatedQuestionnaire(userId: number, id:number): Promise<Questionnaire | null> {
+    async getAggregatedQuestionnaire(id:number): Promise<Questionnaire | null> {
         return await this.prismaService.questionnaire.findFirst({
-            where: { userId, id},
+            where: { id},
             include: {
                 questions: true
             }

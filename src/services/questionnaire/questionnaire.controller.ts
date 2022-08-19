@@ -12,7 +12,6 @@ import { QuestionnaireService } from './questionnaire.service';
 import { Questionnaire as QuestionnaireModel } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
 @Controller('questionnaire')
 export class QuestionnaireController {
     constructor
@@ -21,11 +20,11 @@ export class QuestionnaireController {
         ) { }
 
     @Get(':questionnaireId')
-    async getQuestionnaireById(@Param("questionnaireId",new ParseIntPipe()) questionnaireId, @Request() req): Promise<QuestionnaireModel> {
-        const userId = req.user.userId
-        return this.questionnaireService.getAggregatedQuestionnaire(userId, questionnaireId);
+    async getQuestionnaireById(@Param("questionnaireId",new ParseIntPipe()) questionnaireId): Promise<QuestionnaireModel> {
+        return this.questionnaireService.getAggregatedQuestionnaire(questionnaireId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     async createQuestionnaire(@Request() req): Promise<QuestionnaireModel> {
         const userId = req.user.userId;
