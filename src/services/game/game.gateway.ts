@@ -8,7 +8,7 @@ import { GameService } from "./game.service";
 import { Server } from "socket.io";
 
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: { origin: "*" } })
 export class GameGateway {
     constructor(private readonly gameService: GameService) { }
 
@@ -16,9 +16,10 @@ export class GameGateway {
     server: Server;
 
     @SubscribeMessage('getQuestion')
-    getQuestion(@MessageBody() questionId) {
+    async getQuestion(@MessageBody() payload) {
         console.log('lala');
-
-        return this.gameService.getQuestionById(parseInt(questionId));
+        const answer = await this.gameService.getQuestionById(payload.questionId);
+        return { event: 'getQuestion', data: answer };
+        return 3;
     }
 }
