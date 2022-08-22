@@ -45,5 +45,6 @@ model Question {
   questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
   title           String
   answers         String[]
+  correctAnswer   Int
   questionnaireId Int
 }
