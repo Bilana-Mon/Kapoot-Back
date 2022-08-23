@@ -17,9 +17,15 @@ export class GameGateway {
 
     @SubscribeMessage('getQuestion')
     async getQuestion(@MessageBody() payload) {
-        console.log('lala');
+        console.log('lala question');
         const answer = await this.gameService.getQuestionById(payload.questionId);
         return { event: 'getQuestion', data: answer };
-        return 3;
+    }
+
+    @SubscribeMessage('getAnswerIndex')
+    async getAnswerIndex(@MessageBody() payload) {
+        console.log('lala answer');
+        const answer = await this.gameService.getAnswerByIndex(payload.answerIndex);
+        return { event: 'getAnswerIndex', data: answer };
     }
 }

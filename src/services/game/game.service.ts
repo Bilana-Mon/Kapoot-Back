@@ -14,4 +14,10 @@ export class GameService {
         });
     }
 
+    async getAnswerByIndex(correctAnswer: number): Promise<Question | null> {
+        return this.prismaService.question.findUnique({
+            where: { correctAnswer }
+        })
+    }
+
 }
