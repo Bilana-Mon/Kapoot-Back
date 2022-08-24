@@ -14,10 +14,15 @@ export class GameService {
         });
     }
 
-    async getAnswerByIndex(correctAnswer: number): Promise<Question | null> {
-        return this.prismaService.question.findUnique({
-            where: { correctAnswer }
-        })
+    async getAnswerByIndex(questionId: number, answerIndex: number): Promise<any> {
+        const question = await this.getQuestionById(questionId);
+
+        if (answerIndex === question.correctAnswer) {
+            console.log('you are awesome!', questionId);
+        } else {
+            console.log('nope.', answerIndex);
+        }
+        // return question;
     }
 
 }
