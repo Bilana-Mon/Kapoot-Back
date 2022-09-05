@@ -21,15 +21,16 @@ model User {
 }
 
 model Game {
-  id              Int            @id @default(autoincrement())
-  questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
-  questionnaireId Int?
-  started         DateTime
-  finished        DateTime
-  players         Int
-  // winner    User?  @relation(fields: [players], references: [nickname])
-  Admin           User?          @relation(fields: [adminId], references: [id])
-  adminId         Int?
+  id                      Int            @id @default(autoincrement())
+  questionnaire           Questionnaire? @relation(fields: [questionnaireId], references: [id])
+  questionnaireId         Int?
+  started                 DateTime       @default(now()) @db.Timestamp()
+  finished                DateTime
+  players                 Int
+  correctUserAnswersCount Int
+  // winner                  String         @relation(fields: [correctUserAnswersCount], references: [nickname])
+  Admin                   User?          @relation(fields: [adminId], references: [id])
+  adminId                 Int?
 }
 
 model Questionnaire {

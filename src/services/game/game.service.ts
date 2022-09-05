@@ -7,6 +7,22 @@ import { Game, Prisma, Question } from '@prisma/client';
 export class GameService {
     constructor(private prismaService: PrismaService, questionService: QuestionService) { }
 
+    async createGame(data: Prisma.GameCreateInput): Promise<Game> {
+        const { players, correctUserAnswersCount = 0, finished } = data;
+        return this.prismaService.game.create({
+            data: {
+                players,
+                correctUserAnswersCount,
+                finished
+            }
+        })
+    }
+
+    async getGameById(id: number): Promise<Game | null> {
+        return this.prismaService.game.findUnique({
+            where: { id },
+        });
+    }
 
     async getQuestionById(id: number): Promise<Question | null> {
         return this.prismaService.question.findUnique({
@@ -14,15 +30,27 @@ export class GameService {
         });
     }
 
-    async getAnswerByIndex(questionId: number, answerIndex: number): Promise<any> {
+    async getAnswerByIndex(gameId: number, questionId: number, answerIndex: number): Promise<any> {
+        let correctAnswersCount = 0;
         const question = await this.getQuestionById(questionId);
 
         if (answerIndex === question.correctAnswer) {
+            correctAnswersCount++
             console.log('you are awesome!', questionId);
+            this.updateCorrectAnswersCount(gameId, correctAnswersCount);
         } else {
             console.log('nope.', answerIndex);
+            return correctAnswersCount;
         }
-        // return question;
+    }
+
+    async updateCorrectAnswersCount(id: number, correctAnswersCount: number): Promise<Game> {
+        return this.prismaService.game.update({
+            where: { id },
+            data: {
+                correctUserAnswersCount: correctAnswersCount
+            }
+        })
     }
 
 }
