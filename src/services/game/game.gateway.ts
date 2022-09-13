@@ -25,9 +25,9 @@ export class GameGateway {
     }
 
     @SubscribeMessage('getAnswerIndex')
-    async getAnswerIndex(@MessageBody() { gameId, questionId, answerIndex }) {
+    async getAnswerIndex(@MessageBody() { questionId, answerIndex }) {
         console.log('lala answer');
-        const answer = await this.gameService.getAnswerByIndex(gameId, questionId, answerIndex);
+        const answer = await this.gameService.getAnswerByIndex(questionId, answerIndex);
         console.log('this is me');
         return { event: 'getAnswerIndex', data: answer };
     }
