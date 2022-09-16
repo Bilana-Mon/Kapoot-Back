@@ -1,4 +1,4 @@
-import { 
+import {
     Controller,
     Get,
     Post,
@@ -6,9 +6,9 @@ import {
     Param,
     Body,
     Delete
- } from '@nestjs/common';
- import { GameService } from './game.service';
- import {Game as GameModel} from "@prisma/client";
+} from '@nestjs/common';
+import { GameService } from './game.service';
+import { Game as GameModel } from "@prisma/client";
 
 @Controller('game')
 export class GameController {
@@ -16,4 +16,9 @@ export class GameController {
         (
             private readonly gameService: GameService
         ) { }
+
+    @Post()
+    async createGame(@Body() payload): Promise<GameModel> {
+        return this.gameService.createGame(payload);
+    }
 }

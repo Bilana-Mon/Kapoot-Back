@@ -15,7 +15,6 @@ model User {
   email         String          @unique
   password      String          @unique
   nickname      String?
-  isAdmin       Boolean         @default(false)
   games         Game[]
   Questionnaire Questionnaire[]
 }
@@ -26,11 +25,11 @@ model Game {
   questionnaireId         Int?
   started                 DateTime       @default(now()) @db.Timestamp()
   finished                DateTime
-  players                 Int
   correctUserAnswersCount Int
-  // winner                  String         @relation(fields: [correctUserAnswersCount], references: [nickname])
-  Admin                   User?          @relation(fields: [adminId], references: [id])
-  adminId                 Int?
+  connectedUser           User?          @relation(fields: [userId], references: [id])
+  userId                  Int?
+  difficultyLevel         String
+  victory                 Boolean        @default(false)
 }
 
 model Questionnaire {
