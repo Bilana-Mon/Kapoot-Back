@@ -26,11 +26,12 @@ export class QuestionnaireController {
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    async createQuestionnaire(@Request() req, @Body() payload: { difficultyLevel: DifficultyLevel }): Promise<QuestionnaireModel> {
+    async createQuestionnaire(@Request() req, @Body() payload: { difficultyLevel: DifficultyLevel, timeout: number }): Promise<QuestionnaireModel> {
         const userId = req.user.userId;
         const difficultyLevel = payload.difficultyLevel;
+        const timeout = payload.timeout;
         const createQuestionnairePayload = {
-            userId, difficultyLevel
+            userId, difficultyLevel, timeout
         }
         return this.questionnaireService.createQuestionnaire(createQuestionnairePayload);
     }

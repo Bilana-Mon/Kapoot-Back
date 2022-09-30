@@ -23,6 +23,7 @@ import { JwtStrategy } from './jwt.strategy';
       inject: [ConfigService]
     })],
   providers: [AuthService, JwtStrategy],
-  controllers: [AuthController]
+  controllers: [AuthController],
+  exports: [JwtStrategy]
 })
 export class AuthModule { }

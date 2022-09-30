@@ -9,14 +9,14 @@ export class QuestionnaireService {
 
     async getAggregatedQuestionnaire(id:number): Promise<Questionnaire | null> {
         return await this.prismaService.questionnaire.findFirst({
-            where: { id},
+            where: { id },
             include: {
                 questions: true
             }
         })
     }
 
-    async createQuestionnaire(createQuestionnairePayload: { userId: number, difficultyLevel: DifficultyLevel }): Promise<Questionnaire> {
+    async createQuestionnaire(createQuestionnairePayload: { userId: number, difficultyLevel: DifficultyLevel, timeout: number }): Promise<Questionnaire> {
         return this.prismaService.questionnaire.create({
             data: {
                 ...createQuestionnairePayload

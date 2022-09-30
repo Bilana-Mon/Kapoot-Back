@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Game, Prisma, Question, Questionnaire, DifficultyLevel } from '@prisma/client';
+import { Game, Prisma, Question, Questionnaire } from '@prisma/client';
 
 @Injectable()
 export class GameService {
@@ -32,19 +32,13 @@ export class GameService {
     }
 
     async getAnswerByIndex(questionId: number, answerIndex: number): Promise<any> {
-        let correctAnswersCount = 0;
-        console.log(correctAnswersCount);
-
         const question = await this.getQuestionById(questionId);
 
         if (answerIndex === question.correctAnswer) {
-            correctAnswersCount++
             console.log('you are awesome!', questionId);
-            console.log(correctAnswersCount);
 
         } else {
             console.log('nope.', answerIndex);
-            console.log(correctAnswersCount);
         }
     }
 
