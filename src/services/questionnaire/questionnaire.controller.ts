@@ -9,7 +9,7 @@ import {
     ParseIntPipe
 } from '@nestjs/common';
 import { QuestionnaireService } from './questionnaire.service';
-import { Questionnaire as QuestionnaireModel } from '@prisma/client';
+import { DifficultyLevel, Questionnaire as QuestionnaireModel } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('questionnaire')
@@ -26,9 +26,13 @@ export class QuestionnaireController {
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    async createQuestionnaire(@Request() req): Promise<QuestionnaireModel> {
+    async createQuestionnaire(@Request() req, @Body() payload: { difficultyLevel: DifficultyLevel }): Promise<QuestionnaireModel> {
         const userId = req.user.userId;
-        return this.questionnaireService.createQuestionnaire(userId);
+        const difficultyLevel = payload.difficultyLevel;
+        const createQuestionnairePayload = {
+            userId, difficultyLevel
+        }
+        return this.questionnaireService.createQuestionnaire(createQuestionnairePayload);
     }
 
 }

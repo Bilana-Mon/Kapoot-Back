@@ -11,12 +11,17 @@ datasource db {
 }
 
 model User {
-  id            Int             @id @default(autoincrement())
-  email         String          @unique
-  password      String          @unique
-  nickname      String?
-  games         Game[]
-  Questionnaire Questionnaire[]
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String  @unique
+  nickname String?
+  games    Game[]
+}
+
+enum DifficultyLevel {
+  EASY
+  HARD
+  EXTREME
 }
 
 model Game {
@@ -26,18 +31,17 @@ model Game {
   started                 DateTime       @default(now()) @db.Timestamp()
   finished                DateTime
   correctUserAnswersCount Int
-  connectedUser           User?          @relation(fields: [userId], references: [id])
+  user                    User?          @relation(fields: [userId], references: [id])
   userId                  Int?
-  difficultyLevel         String
   victory                 Boolean        @default(false)
 }
 
 model Questionnaire {
-  id        Int        @id @default(autoincrement())
-  questions Question[]
-  Game      Game[]
-  user      User?      @relation(fields: [userId], references: [id])
-  userId    Int
+  id              Int             @id @default(autoincrement())
+  questions       Question[]
+  Game            Game[]
+  timeout         Int
+  difficultyLevel DifficultyLevel
 }
 
 model Question {

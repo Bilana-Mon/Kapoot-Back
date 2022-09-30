@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Game, Prisma, Question, Questionnaire } from '@prisma/client';
+import { Game, Prisma, Question, Questionnaire, DifficultyLevel } from '@prisma/client';
 
 @Injectable()
 export class GameService {
@@ -29,39 +29,6 @@ export class GameService {
         return this.prismaService.questionnaire.findUnique({
             where: { id },
         });
-    }
-
-    async setGameLevel(questionnaireId: number, gameId: number): Promise<Game> {
-        const questionnaire = await this.getQuestionnaireById(questionnaireId);
-
-        if (questionnaire.id === 10) {
-            return this.prismaService.game.update({
-                where: {
-                    id: gameId
-                },
-                data: {
-                    difficultyLevel: "Easy"
-                }
-            });
-        } else if (questionnaire.id === 11) {
-            return this.prismaService.game.update({
-                where: {
-                    id: gameId
-                },
-                data: {
-                    difficultyLevel: "Hard"
-                }
-            });
-        } else {
-            return this.prismaService.game.update({
-                where: {
-                    id: gameId
-                },
-                data: {
-                    difficultyLevel: "Extreme"
-                }
-            });
-        };
     }
 
     async getAnswerByIndex(questionId: number, answerIndex: number): Promise<any> {

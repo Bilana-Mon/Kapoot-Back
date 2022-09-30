@@ -1,15 +1,15 @@
-import { Questionnaire } from '@prisma/client';
+import { Questionnaire, DifficultyLevel } from '@prisma/client';
 export default [
 	{
 		"id" : 10,
-		"userId" : 4
+		"difficultyLevel": DifficultyLevel.EASY
 	},
 	{
 		"id" : 11,
-		"userId" : 4
+		"difficultyLevel": DifficultyLevel.HARD
 	},
 	{
 		"id" : 12,
-		"userId" : 4
+		"difficultyLevel": DifficultyLevel.EXTREME
 	}
 ] as Array<Questionnaire>

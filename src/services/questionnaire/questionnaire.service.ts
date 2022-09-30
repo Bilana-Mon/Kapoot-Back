@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Questionnaire, Prisma, Question } from '@prisma/client'
+import { Questionnaire, Prisma, Question, DifficultyLevel } from '@prisma/client'
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -16,10 +16,10 @@ export class QuestionnaireService {
         })
     }
 
-    async createQuestionnaire(userId: number): Promise<Questionnaire> {
+    async createQuestionnaire(createQuestionnairePayload: { userId: number, difficultyLevel: DifficultyLevel }): Promise<Questionnaire> {
         return this.prismaService.questionnaire.create({
             data: {
-                userId,
+                ...createQuestionnairePayload
             }
         })
     }
