@@ -40,17 +40,20 @@ export class GameService {
         } else {
             console.log('nope.', answerIndex);
         }
+
     }
 
-
-
-    // async updateCorrectAnswersCount(id: number, correctAnswersCount: number): Promise<Game> {
-    //     return this.prismaService.game.update({
-    //         where: { id },
-    //         data: {
-    //             correctUserAnswersCount: correctAnswersCount
-    //         }
-    //     })
-    // }
-
+    async setGameVictory(correctAnswersCount: number): Promise<any> {
+        let isVictory = false;
+        const winScore = 10;
+        let finalScore = 0;
+        finalScore = Math.floor((correctAnswersCount / winScore) * 100);
+        console.log(finalScore);
+        // if (finalScore === ) {
+        //     isVictory = true;
+        // } else {
+        //     isVictory = false;
+        // }
+        return finalScore;
+    }
 }

@@ -56,4 +56,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         return { event: 'getAnswerIndex', data: answer };
     }
 
+    @SubscribeMessage('setGameVictory')
+    async setGameVictory(@ConnectedSocket() client: Socket) {
+        const { correctAnswersCount } = this.usersContext.get(client.id);
+        const answer = await this.gameService.setGameVictory(correctAnswersCount);
+        return { event: 'setGameVictory', data: answer };
+    }
+
 }
