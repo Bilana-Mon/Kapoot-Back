@@ -13,7 +13,7 @@ import { Server, Socket } from "socket.io";
 
 @WebSocketGateway({ cors: { origin: "*" } })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
-    private usersContext : Map<string, {
+    private usersContext: Map<string, {
         correctAnswersCount: number
     }>
     constructor(private readonly gameService: GameService) {
@@ -36,7 +36,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @SubscribeMessage('getQuestion')
-    async getQuestion(@ConnectedSocket() client: Socket,@MessageBody() payload) {
+    async getQuestion(@ConnectedSocket() client: Socket, @MessageBody() payload) {
 
         const answer = await this.gameService.getQuestionById(payload.questionId);
         console.log('isnt this exciting?', payload.questionId);
@@ -45,10 +45,15 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @SubscribeMessage('getAnswerIndex')
-    async getAnswerIndex(@ConnectedSocket() client: Socket,@MessageBody() { questionId, answerIndex }) {
-        // client.
+    async getAnswerIndex(@ConnectedSocket() client: Socket, @MessageBody() { questionId, answerIndex }) {
+        const question = await this.gameService.getQuestionById(questionId);
         const answer = await this.gameService.getAnswerByIndex(questionId, answerIndex);
-        console.log('this is me');
+        if (answerIndex === question.correctAnswer) {
+            const { correctAnswersCount } = this.usersContext.get(client.id);
+            this.usersContext.set(client.id, { correctAnswersCount: correctAnswersCount + 1 });
+            console.log(correctAnswersCount);
+        }
         return { event: 'getAnswerIndex', data: answer };
     }
+
 }
