@@ -55,30 +55,43 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         client.emit('showQuestionEvent', this.getCurrentQuestionOfUser(client.id));
     }
 
+    calcContextAfterAnswer(clientId: string, answerIndex: number) {
+        const currentQuestion = this.getCurrentQuestionOfUser(clientId);
+        const newUserContext = this.usersContext.get(clientId);
+        if (currentQuestion.correctAnswer === answerIndex) {
+            newUserContext.correctAnswersCount = newUserContext.correctAnswersCount + 1;
+        }
+        newUserContext.currentQuestionIndex = newUserContext.currentQuestionIndex + 1;
+        return newUserContext;
+    }
+
     calcFinalScore(correctAnswers: number, numberOfAnswers: number) {
         const score = Math.trunc(correctAnswers * 100 / numberOfAnswers);
         return score;
     }
 
-
     @SubscribeMessage('getAnswerIndex')
     async getAnswerIndex(@ConnectedSocket() client: Socket, @MessageBody() payload: { answerIndex: number }) {
-        const currentQuestion = this.getCurrentQuestionOfUser(client.id);
-        const currentUserContext = this.usersContext.get(client.id);
-        if (currentQuestion.correctAnswer === payload.answerIndex) {
-            currentUserContext.correctAnswersCount = currentUserContext.correctAnswersCount + 1;
-        }
-        currentUserContext.currentQuestionIndex = currentUserContext.currentQuestionIndex + 1;
-        this.usersContext.set(client.id, currentUserContext);
-        if (currentUserContext.currentQuestionIndex === currentUserContext.questionnaire.questions.length) {
-            const numberOfQuestions = currentUserContext.questionnaire.questions.length;
-            const correctAnswers = currentUserContext.correctAnswersCount
+        const newUserContext = this.calcContextAfterAnswer(client.id, payload.answerIndex);
+        this.usersContext.set(client.id, newUserContext);
+
+        if (newUserContext.currentQuestionIndex === newUserContext.questionnaire.questions.length) {
+            const numberOfQuestions = newUserContext.questionnaire.questions.length;
+            const correctAnswers = newUserContext.correctAnswersCount
+            const score = this.calcFinalScore(correctAnswers, numberOfQuestions);
+            const victoryThreshold = 70;
             client.emit('showGameConclusion', {
                 numberOfQuestions,
                 correctAnswers,
-                score: this.calcFinalScore(correctAnswers,numberOfQuestions)
+                score,
             })
+            if (score >= victoryThreshold) {
+                client.emit('showGameVictory', console.log('victory'))
+            } else {
+                client.emit('showGameLose', console.log('lose'))
+            }
         }
+
         else {
             client.emit('showQuestionEvent', this.getCurrentQuestionOfUser(client.id));
         }
