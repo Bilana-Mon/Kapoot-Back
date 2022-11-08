@@ -52,6 +52,9 @@ export class AuthController {
         const foundUser = await this.authService.findUserByToken(userId);
         console.log(foundUser);
 
-        return foundUser;
+        const nickname = foundUser.nickname;
+        console.log(nickname);
+
+        return nickname;
     }
 }
