@@ -7,7 +7,9 @@ import {
     Put,
     Delete,
     Request,
-    UseGuards
+    UseGuards,
+    Req,
+    UnauthorizedException
 } from '@nestjs/common';
 import { UserService } from '../services/user/user.service';
 import { User as UserModel } from '@prisma/client';
@@ -19,7 +21,7 @@ export class AuthController {
         (
             private readonly userService: UserService,
             private readonly authService: AuthService,
-    ) { }
+        ) { }
 
     @Post('/signup')
     async signupUser(
@@ -31,10 +33,25 @@ export class AuthController {
     }
 
     @Post('/login')
-    async login(@Body() loginPayload: { nickname: string; password: string }) {      
+    async login(@Body() loginPayload: { nickname: string; password: string }) {
         const token = await this.authService.loginUser(loginPayload);
         return {
             token
         }
+    }
+
+    @Get('/me')
+    async getUserByToken(@Request() req, @Body() loginPayload: { nickname: string; password: string }) {
+        const token = await this.authService.loginUser(loginPayload);
+        if (!token) throw new UnauthorizedException('No token provided!');
+
+        const userId = await this.authService.getUserIdByToken(token);
+        console.log(userId);
+
+
+        const foundUser = await this.authService.findUserByToken(userId);
+        console.log(foundUser);
+
+        return foundUser;
     }
 }
