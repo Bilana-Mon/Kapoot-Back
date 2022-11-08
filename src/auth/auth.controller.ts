@@ -46,7 +46,7 @@ export class AuthController {
         if (!token) throw new UnauthorizedException('No token provided!');
 
         const userId = await this.authService.getUserIdByToken(token);
-        console.log(userId);
+        console.log(userId, 'userId');
 
 
         const foundUser = await this.authService.findUserByToken(userId);
@@ -55,6 +55,6 @@ export class AuthController {
         const nickname = foundUser.nickname;
         console.log(nickname);
 
-        return nickname;
+        return { userId, nickname };
     }
 }
