@@ -1,10 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import { UnauthorizedException } from '@nestjs/common';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -22,13 +20,13 @@ export class UserService {
         });
 
         if (!foundUser) {
-            throw new UnauthorizedException('Please check nickname and password')
+            throw new ForbiddenException('Please check nickname and password')
         }
 
         const isPasswordMatching = await bcrypt.compare(password, foundUser.password);
 
         if (!isPasswordMatching) {
-            throw new UnauthorizedException('Please check nickname and password')
+            throw new ForbiddenException('Please check nickname and password')
         }
 
         return foundUser;
@@ -51,10 +49,10 @@ export class UserService {
         });
 
         if (userWithThisEmail) {
-            throw new UnauthorizedException('User with this email existing!')
+            throw new ForbiddenException('User with this email existing!')
         }
         if (userWithThisNickname) {
-            throw new UnauthorizedException('User with this nickname existing!')
+            throw new ForbiddenException('User with this nickname existing!')
         }
 
         const saltedPassword = await bcrypt.hash(password, Number(this.configService.get('SALT')))
@@ -66,17 +64,6 @@ export class UserService {
             }
         });
     }
-
-    // async findOne(data: Prisma.UserWhereUniqueInput): Promise<User> {
-    //     const userId = data;
-    //     return await this.prismaService.user.findUnique({
-    //         where: {
-    //             userId : userId
-    //         }
-
-    //     })
-
-    // }
 
     async updateUser(params: {
         where: Prisma.UserWhereUniqueInput;
