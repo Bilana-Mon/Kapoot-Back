@@ -8,14 +8,18 @@ export class AuthService {
     constructor(
         private userService: UserService,
         private jwtService: JwtService,
-        private prismaService: PrismaService
+        private prismaService: PrismaService,
     ) { }
+
+    createUserToken(userId: number) {
+        return this.jwtService.sign({
+            userId
+        })
+    }
 
     async loginUser(user: { nickname: string; password: string }) {
         const loggedUser = await this.userService.validateUser(user.nickname, user.password);
-        return this.jwtService.sign({
-            userId: loggedUser.id
-        });
+        return this.createUserToken(loggedUser.id);
     }
 
     async getUserIdByToken(token: string) {

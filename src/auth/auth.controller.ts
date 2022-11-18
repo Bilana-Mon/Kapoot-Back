@@ -8,6 +8,7 @@ import {
     Delete,
     Request,
     UseGuards,
+    Response,
     Req,
     UnauthorizedException
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { UserService } from '../services/user/user.service';
 import { User as UserModel } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { GoogleAuthGuard } from './google.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -28,13 +30,25 @@ export class AuthController {
     async signupUser(
         @Body() userData: { nickname: string; email: string, password: string },
     ): Promise<UserModel> {
-        // const token = await this.authService.loginUser(userData);
-        const user = this.userService.createUser(userData);
+
+        const creationPayload = {
+            ...userData,
+            provider: 'sign-up'
+        }
+
+        console.log('creationPayload', creationPayload);
+
+
+        const user = this.userService.createUser(creationPayload);
+        console.log(user);
+
         return user;
     }
 
     @Post('/login')
     async login(@Body() loginPayload: { nickname: string; password: string }) {
+        console.log('loginPayload', loginPayload);
+
         const token = await this.authService.loginUser(loginPayload);
         return {
             token
@@ -46,5 +60,18 @@ export class AuthController {
     async getUserByToken(@Request() req) {
         const userId = req.user.userId;
         return this.userService.getUserById(userId);
+    }
+
+    @UseGuards(GoogleAuthGuard)
+    @Get('/google')
+    async authWithGoogle(@Request() req) {
+        console.log(req);
+    }
+
+    @UseGuards(GoogleAuthGuard)
+    @Get('/google/redirect')
+    async redirectFromGoogle(@Request() req, @Response() res) {
+        const { userId } = req.user;
+        res.redirect(`http://localhost:3000/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`);
     }
 }

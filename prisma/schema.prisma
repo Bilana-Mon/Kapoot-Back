@@ -11,11 +11,15 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String  @unique
-  nickname String?
-  games    Game[]
+  id           Int     @id @default(autoincrement())
+  email        String  @unique
+  password     String?
+  nickname     String?
+  provider     String
+  idInProvider String?
+  games        Game[]
+
+  @@unique([email, provider])
 }
 
 enum DifficultyLevel {

@@ -33,13 +33,24 @@ export class UserService {
 
     }
 
+    async userFromProvider(provider: string, idInProvider: string): Promise<User | undefined> {
+        const foundUser = this.prismaService.user.findFirst({
+            where: {
+                provider,
+                idInProvider
+            }
+        })
+        return foundUser;
+    }
+
 
     async createUser(data: Prisma.UserCreateInput): Promise<User> {
-        const { nickname, email, password } = data;
+        const { nickname, email, password, provider, idInProvider } = data;
 
         const userWithThisEmail = await this.prismaService.user.findFirst({
             where: {
-                email
+                email,
+                provider
             }
         });
         const userWithThisNickname = await this.prismaService.user.findFirst({
@@ -55,30 +66,14 @@ export class UserService {
             throw new ForbiddenException('User with this nickname existing!')
         }
 
-        const saltedPassword = await bcrypt.hash(password, Number(this.configService.get('SALT')))
         return this.prismaService.user.create({
             data: {
+                provider,
                 nickname,
                 email,
-                password: saltedPassword
+                idInProvider,
+                password: data.password ? bcrypt.hashSync(password, Number(this.configService.get('SALT'))) : undefined
             }
-        });
-    }
-
-    async updateUser(params: {
-        where: Prisma.UserWhereUniqueInput;
-        data: Prisma.UserUpdateInput;
-    }): Promise<User> {
-        const { where, data } = params;
-        return this.prismaService.user.update({
-            data,
-            where,
-        });
-    }
-
-    async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
-        return this.prismaService.user.delete({
-            where,
         });
     }
 }
