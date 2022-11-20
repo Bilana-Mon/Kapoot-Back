@@ -8,7 +8,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService: ConfigService = app.get<ConfigService>(ConfigService);
   const port = configService.get('PORT');
-  app.enableCors();
+  app.enableCors({
+    origin: ['https://kapoot.app'],
+  });
   await app.listen(port);
 }
 
