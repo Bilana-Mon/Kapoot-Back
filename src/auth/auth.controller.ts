@@ -17,6 +17,7 @@ import { User as UserModel } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { GoogleAuthGuard } from './google.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
@@ -24,6 +25,7 @@ export class AuthController {
         (
             private readonly userService: UserService,
             private readonly authService: AuthService,
+            private readonly configService: ConfigService
         ) { }
 
     @Post('/signup')
@@ -72,6 +74,6 @@ export class AuthController {
     @Get('/google/redirect')
     async redirectFromGoogle(@Request() req, @Response() res) {
         const { userId } = req.user;
-        res.redirect(`http://localhost:3000/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`);
+        res.redirect(`${this.configService.get('CLIENT_URL')}/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`);
     }
 }
