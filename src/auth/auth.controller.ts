@@ -75,5 +75,7 @@ export class AuthController {
     async redirectFromGoogle(@Request() req, @Response() res) {
         const { userId } = req.user;
         res.redirect(`${this.configService.get('CLIENT_URL')}/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`);
+        console.log(res.redirect(`${this.configService.get('CLIENT_URL')}/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`));
+
     }
 }
