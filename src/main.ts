@@ -9,7 +9,7 @@ async function bootstrap() {
   const configService: ConfigService = app.get<ConfigService>(ConfigService);
   const port = configService.get('PORT');
   app.enableCors({
-    origin: ['https://kapoot.app', 'https://api.kapoot.app'],
+    origin: ["https://kapoot.app", "https://api.kapoot.app"],
   });
   await app.listen(port);
 }
