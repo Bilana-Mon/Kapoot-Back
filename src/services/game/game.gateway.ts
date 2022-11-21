@@ -13,7 +13,7 @@ import { Question, Questionnaire } from "@prisma/client";
 import { QuestionnaireService } from "../questionnaire/questionnaire.service";
 
 
-@WebSocketGateway({ cors: { origin: ['https://kapoot.app', 'https://api.kapoot.app'] } })
+@WebSocketGateway({ cors: { origin: "*" } })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private usersContext: Map<string, {
         userId?: number;
