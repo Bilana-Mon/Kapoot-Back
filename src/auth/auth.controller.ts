@@ -38,18 +38,12 @@ export class AuthController {
             provider: 'sign-up'
         }
 
-        console.log('creationPayload', creationPayload);
-
-
         const user = this.userService.createUser(creationPayload);
-        console.log(user);
-
         return user;
     }
 
     @Post('/login')
     async login(@Body() loginPayload: { nickname: string; password: string }) {
-        console.log('loginPayload', loginPayload);
 
         const token = await this.authService.loginUser(loginPayload);
         return {
@@ -74,11 +68,6 @@ export class AuthController {
     @Get('/google/redirect')
     async redirectFromGoogle(@Request() req, @Response() res) {
         const { userId } = req.user;
-        console.log('lala');
-
-        console.log(`${this.configService.get('CLIENT_URL')}/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`);
         return res.redirect(`${this.configService.get('CLIENT_URL')}/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`);
-
-
     }
 }

@@ -7,21 +7,20 @@ import { Question, Prisma } from '@prisma/client';
 export class QuestionService {
     constructor(private prismaService: PrismaService) { }
 
-    async getQuestions(): Promise<any>{
+    async getQuestions(): Promise<any> {
         return this.prismaService.question.findMany({
-            where:{}
+            where: {}
         })
     }
 
     async getQuestionById(id: number): Promise<Question | null> {
-        console.log('lala service');
 
         return this.prismaService.question.findUnique({
             where: { id },
         });
     }
 
-    async createQuestion(payload: Prisma.QuestionCreateInput):Promise<Question>{
+    async createQuestion(payload: Prisma.QuestionCreateInput): Promise<Question> {
         return this.prismaService.question.create({
             data: payload
         })

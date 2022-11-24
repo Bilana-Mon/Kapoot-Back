@@ -48,12 +48,6 @@ export class GameService {
         const winScore = 10;
         let finalScore = 0;
         finalScore = Math.floor((correctAnswersCount / winScore) * 100);
-        console.log(finalScore);
-        // if (finalScore === ) {
-        //     isVictory = true;
-        // } else {
-        //     isVictory = false;
-        // }
         return finalScore;
     }
 }

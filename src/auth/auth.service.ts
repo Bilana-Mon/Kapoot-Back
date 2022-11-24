@@ -24,10 +24,8 @@ export class AuthService {
 
     async getUserIdByToken(token: string) {
         const decoded = this.jwtService.verify(token);
-        console.log(decoded);
 
         const userId = decoded.userId;
-        console.log(userId);
         return userId;
     }
 

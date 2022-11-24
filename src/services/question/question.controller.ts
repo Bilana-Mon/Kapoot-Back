@@ -18,7 +18,6 @@ export class QuestionController {
 
     @Get(':id')
     async getQuestionById(@Param('id') questionId): Promise<QuestionModel> {
-        console.log('lala get');
         return this.questionService.getQuestionById(parseInt(questionId));
     }
 
