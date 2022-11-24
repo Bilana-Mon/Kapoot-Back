@@ -74,8 +74,11 @@ export class AuthController {
     @Get('/google/redirect')
     async redirectFromGoogle(@Request() req, @Response() res) {
         const { userId } = req.user;
-        console.log(res.redirect(`${this.configService.get('CLIENT_URL')}/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`));
-        res.redirect(`${this.configService.get('CLIENT_URL')}/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`);
+        console.log('lala');
+
+        console.log(`${this.configService.get('CLIENT_URL')}/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`);
+        return res.redirect(`${this.configService.get('CLIENT_URL')}/fromRedirect/?userToken=${this.authService.createUserToken(userId)}`);
+
 
     }
 }
